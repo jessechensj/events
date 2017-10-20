@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Edit Event</title>
+    </head>
+
+    <body>
+        <a href='/events'>Events Dashboard</a>
+        <form action='/events/<%= @event.id %>' method='post'>
+            <input type='hidden' name='_method' value='patch'>
+            <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+            Name: <input type='text' name='name' value='<%= @event.name %>'> <br>
+            Date: <input type='date' name='date' value='<%= @event.date %>'> <br>
+            Location: <input type='text' name='location' value='<%= @event.location %>'>
+            <select name="state" value='<%= @event.state %>'>
+                <option value="WA">WA</option>
+                <option value="CA">CA</option>
+                <option value="NY">NY</option>
+                <option value="TX">TX</option>
+            </select> <br>
+            <input type='submit' value='Update Event'>
+        </form>
+    </body>
+</html>

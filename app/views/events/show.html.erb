@@ -1,0 +1,54 @@
+<html>
+    <head>
+        <title>Event</title>
+        <style>
+            body{
+                display: flex
+            }
+            table,tr,th,td{
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href='/events'>Event Dashboard</a>
+        <div id='event'>
+            <h1><%= @event.name %></h1>
+            Host: <%= @event.user.first_name %> <%= @event.user.last_name %> <br>
+            Date: <%= @event.date %> <br>
+            Location: <%= @event.location %>, <%= @event.state %> <br>
+            People who are joining the event: <%= @event.users.count %>
+
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>State</th>
+                <tr>
+                <% @event.users.each do |user| %>
+                    <tr>
+                        <td><%= user.first_name %> <%= user.last_name %></td>
+                        <td><%= user.location %></td>
+                        <td><%= user.state %></td>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+
+        <div id='discussion'>
+            Discussion about this event:
+            <% @comments.each do |comment| %>
+                <%= comment.user.first_name %> says: <%= comment.content %> <br>    
+            <% end %>
+            
+            Add Comment:
+            <form action='/events/<%= @event.id %>/comment' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                <input type='text' name='content'>
+                <input type='submit' value='Submit Comments'>
+            </form>
+        </div>
+    </body>
+</html>

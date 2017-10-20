@@ -1,0 +1,130 @@
+<html>
+    <head>
+        <title>Events</title>
+        <style>
+            table,tr,th,td{
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+
+    <body>
+        <a href='/users/<%= session[:user_id] %>/edit'>Edit My Profile</a>
+        Welcome, <%= current_user.first_name %>!
+
+        Here are some of the events at your state:
+        <div id='in_state'>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Host</th>
+                    <th>Action/Status</th>
+                </tr>
+                <% @in_state.each do |event| %>
+                    <tr>
+                        <th><a href='/events/<%= event.id %>'><%= event.name %></a></th>
+                        <th><%= event.date %></th>
+                        <th><%= event.location %></th>
+                        <th><%= event.user.first_name %></th>
+                        <th>
+                            <% if event.user == current_user %>
+                                <a href='/events/<%= event.id %>/edit'>Edit</a>
+
+                                <form action='/events/<%= event.id %>' method='post'>
+                                    <input type='hidden' name='_method' value='delete'>
+                                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                                    <input type='submit' value='Delete'>
+                                </form>
+                            <% else %>
+                                <% if current_user.attending %>
+                                    <% attending = false %>
+                                    <% current_user.attending.each do |event2| %>
+                                        <% if event2 == event %>
+                                            <% attending = true %>
+                                        <% end %>
+                                    <% end %>
+                                    <% if attending %>
+                                        <a href='/events/<%= event.id %>/cancel'>Cancel</a>
+                                    <% end %>
+                                    <% unless attending %>
+                                        <a href='/events/<%= event.id %>/join'>Join</a>
+                                    <% end %>
+                                <% end %>
+                            <% end %>   
+                        </th>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+        
+        Here are some of the events on other states:
+        <div id='out_of_state'>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>State</th>
+                    <th>Host</th>
+                    <th>Action</th>
+                </tr>
+                <% @out_of_state.each do |event| %>
+                    <tr>
+                        <th><a href='/events/<%= event.id %>'><%= event.name %></a></th>
+                        <th><%= event.date %></th>
+                        <th><%= event.location %></th>
+                        <th><%= event.state %></th>
+                        <th><%= event.user.first_name %></th>
+                        <th>
+                            <% if event.user == current_user %>
+                                <a href='/events/<%= event.id %>/edit'>Edit</a>
+                            
+                                <form action='/events/<%= event.id %>' method='post'>
+                                    <input type='hidden' name='_method' value='delete'>
+                                    <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                                    <input type='submit' value='Delete'>
+                                </form>
+                            <% else %>
+                                <% if current_user.attending %>
+                                    <% attending = false %>
+                                    <% current_user.attending.each do |event2| %>
+                                        <% if event2 == event %>
+                                            <% attending = true %>
+                                        <% end %>
+                                    <% end %>
+                                    <% if attending %>
+                                        <a href='/events/<%= event.id %>/cancel'>Cancel</a>
+                                    <% end %>
+                                    <% unless attending %>
+                                        <a href='/events/<%= event.id %>/join'>Join</a>
+                                    <% end %>
+                                <% end %>
+                            <% end %>   
+                        </th>
+                    </tr>
+                <% end %>
+            </table>
+        </div>
+
+        Add Event:
+        <div id='add'>
+            <form action='/events' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                Name: <input type='text' name='name'> <br>
+                Date: <input type='date' name='date'> <br>
+                Location: <input type='text' name='location'>
+                <select name="state">
+                    <option value="WA">WA</option>
+                    <option value="CA">CA</option>
+                    <option value="NY">NY</option>
+                    <option value="TX">TX</option>
+                </select> <br>
+                <input type='hidden' name='user_id' value='<%= session[:user_id] %>'>
+                <input type='submit' value='Add Event'>
+            </form>
+        </div>
+    </body>
+</html>

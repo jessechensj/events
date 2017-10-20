@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Welcome!</title>
+        <style>
+            body{
+                display: flex;
+            }
+        </style>
+    <head>
+
+    <body>
+        <div id='register'>
+            <form action='/users' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                First Name: <input type='text' name='first_name'> <br>
+                Last Name: <input type='text' name='last_name'> <br>
+                Email: <input type='text' name='email'> <br>
+                Location: <input type='text' name='location'> 
+                <select name="state">
+                    <option value="WA">WA</option>
+                    <option value="CA">CA</option>
+                    <option value="NY">NY</option>
+                    <option value="TX">TX</option>
+                </select> <br>
+                Password: <input type='password' name='password'> <br>
+                Confirm PW: <input type='password' name='password_confirmation'> <br>
+                <input type='submit' value='Register'>
+            </form>
+        </div>
+
+        <div id='login'>
+            <form action='/sessions' method='post'>
+                <input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+                Email: <input type='text' name='email'> <br>
+                Password: <input type='password' name='password'> <br>
+                <input type='submit' value='Login'>
+            </form>
+        </div>
+    <body>
+</html>
